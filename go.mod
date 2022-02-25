@@ -1,4 +1,4 @@
-module mth
+module github.com/flevanti/mth
 
 go 1.17
 
