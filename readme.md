@@ -1,6 +1,6 @@
 # Matillion Task History
 
-This package can be user to interact with Matillion API and retrieve the history of tasks run. 
+This package can be used to interact with Matillion API and retrieve the history of tasks run. 
 
 More specifically it can be used to
 - retrieve the list of groups 
