@@ -79,7 +79,7 @@ const (
 	URLGETGROUPS                  = "rest/v1/group"
 	URLGETPROJECTS                = "rest/v1/group/name/%s/project"
 	URLGETHISTORYBYENDDATERANGE   = "rest/v1/group/name/%s/project/name/%s/task/filter/by/end/range/date/%s/time/%s/to/date/%s/time/%s"
-	URLGETHISTORYBYSTARTDATERANGE = "rest/v1/group/name/%s/project/name/%s/task/filter/by/end/range/date/%s/time/%s/to/date/%s/time/%s"
+	URLGETHISTORYBYSTARTDATERANGE = "rest/v1/group/name/%s/project/name/%s/task/filter/by/start/range/date/%s/time/%s/to/date/%s/time/%s"
 )
 
 func New(baseUrl string, apiUser string, apiPassword string) Client {
