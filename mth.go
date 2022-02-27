@@ -80,6 +80,7 @@ const (
 	URLGETPROJECTS                = "rest/v1/group/name/%s/project"
 	URLGETHISTORYBYENDDATERANGE   = "rest/v1/group/name/%s/project/name/%s/task/filter/by/end/range/date/%s/time/%s/to/date/%s/time/%s"
 	URLGETHISTORYBYSTARTDATERANGE = "rest/v1/group/name/%s/project/name/%s/task/filter/by/start/range/date/%s/time/%s/to/date/%s/time/%s"
+	URLGETHISTORYBYTASKID         = "rest/v1/task/id/%d"
 )
 
 func New(baseUrl string, apiUser string, apiPassword string) Client {
@@ -113,6 +114,23 @@ func (c *Client) getUrlBody(url string) ([]byte, error) {
 	}
 
 	return bodyText, nil
+
+}
+
+func (c *Client) GetHistoryByTaskId(taskId int64) TaskWrapperT {
+	var url string = fmt.Sprintf("%s%s", c.url, fmt.Sprintf(URLGETHISTORYBYTASKID, taskId))
+	var task TaskT
+
+	body, err := c.getUrlBody(url)
+	if err != nil {
+		return TaskWrapperT{Err: err}
+	}
+	err = json.Unmarshal(body, &task)
+	if err != nil {
+		return TaskWrapperT{Err: err}
+	}
+
+	return TaskWrapperT{Task: task}
 
 }
 
