@@ -81,6 +81,7 @@ const (
 	URLGETHISTORYBYENDDATERANGE   = "rest/v1/group/name/%s/project/name/%s/task/filter/by/end/range/date/%s/time/%s/to/date/%s/time/%s"
 	URLGETHISTORYBYSTARTDATERANGE = "rest/v1/group/name/%s/project/name/%s/task/filter/by/start/range/date/%s/time/%s/to/date/%s/time/%s"
 	URLGETHISTORYBYTASKID         = "rest/v1/task/id/%d"
+	URLGETRUNNINGTASKS            = "rest/v1/group/name/%s/project/name/%s/task/running"
 )
 
 func New(baseUrl string, apiUser string, apiPassword string) Client {
@@ -227,4 +228,39 @@ func (c *Client) GetProjects(group string) ([]string, error) {
 	}
 
 	return projects, nil
+}
+
+func (c *Client) GetRunningTasks(group string, project string) (chan TaskWrapperT, error) {
+	var ch = make(chan TaskWrapperT)
+	var tasks TasksHistoryT
+	var task TaskT
+	go func() {
+		defer close(ch)
+		var urlToUse string = URLGETRUNNINGTASKS
+
+		url := fmt.Sprintf("%s%s", c.url, fmt.Sprintf(urlToUse, group, project))
+		body, err := c.getUrlBody(url)
+		if err != nil {
+			ch <- TaskWrapperT{
+				Task: TaskT{},
+				Err:  err,
+			}
+			return
+		}
+		err = json.Unmarshal(body, &tasks)
+		if err != nil {
+			ch <- TaskWrapperT{
+				Task: TaskT{},
+				Err:  err,
+			}
+			return
+		}
+		for _, task = range tasks {
+			ch <- TaskWrapperT{
+				Task: task,
+			}
+		}
+		return
+	}()
+	return ch, nil
 }
